@@ -1915,13 +1915,6 @@ def test_dot_align_coords(use_dask) -> None:
         xr.testing.assert_allclose(expected, actual)
 
 
-def test_where() -> None:
-    cond = xr.DataArray([True, False], dims="x")
-    actual = xr.where(cond, 1, 0)
-    expected = xr.DataArray([1, 0], dims="x")
-    assert_identical(expected, actual)
-
-
 def test_where_keep_attrs() -> None:
     cond = xr.DataArray([True, False], dims="x", attrs={"source": "condition"})
     x = xr.DataArray([1, 2], dims="x", attrs={"source": "x"})
@@ -1936,6 +1929,13 @@ def test_where_keep_attrs() -> None:
     with xr.set_options(keep_attrs=False):
         assert xr.where(cond, x, y).attrs == {}
         assert xr.where(cond, x, y, keep_attrs=True).attrs == x.attrs
+
+
+def test_where() -> None:
+    cond = xr.DataArray([True, False], dims="x")
+    actual = xr.where(cond, 1, 0)
+    expected = xr.DataArray([1, 0], dims="x")
+    assert_identical(expected, actual)
 
 
 @pytest.mark.parametrize("use_dask", [True, False])
